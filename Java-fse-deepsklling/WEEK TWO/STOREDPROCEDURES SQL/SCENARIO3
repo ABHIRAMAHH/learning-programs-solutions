@@ -1,0 +1,37 @@
+CREATE OR REPLACE PROCEDURE TransferFunds (
+    from_account IN NUMBER,
+    to_account IN NUMBER,
+    amount IN NUMBER
+) IS
+    insufficient_balance EXCEPTION;
+    current_balance NUMBER;
+BEGIN
+    -- Check balance
+    SELECT Balance INTO current_balance FROM Accounts WHERE AccountID = from_account;
+
+    IF current_balance < amount THEN
+        RAISE insufficient_balance;
+    END IF;
+
+    -- Debit source account
+    UPDATE Accounts
+    SET Balance = Balance - amount
+    WHERE AccountID = from_account;
+
+    -- Credit destination account
+    UPDATE Accounts
+    SET Balance = Balance + amount
+    WHERE AccountID = to_account;
+
+    COMMIT;
+
+EXCEPTION
+    WHEN insufficient_balance THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Insufficient balance in source account');
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Account not found');
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE;
+END;
+/
