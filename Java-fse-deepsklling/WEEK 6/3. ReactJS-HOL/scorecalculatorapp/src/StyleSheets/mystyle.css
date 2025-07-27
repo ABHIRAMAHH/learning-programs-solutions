@@ -1,0 +1,17 @@
+.score-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  margin: 30px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.score-container h2 {
+  color: #4a90e2;
+}
+
+.highlight {
+  color: green;
+  font-weight: bold;
+}
